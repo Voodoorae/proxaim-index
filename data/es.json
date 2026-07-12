@@ -1,0 +1,27 @@
+{
+  "citeName": "El Índice Proxaim",
+  "edition": "Edición de recogida (Edición 1: septiembre de 2026)",
+  "updated": "julio de 2026",
+  "sampleSize": 0,
+  "previewOverride": false,
+  "_note": "Spanish dataset in collection. No figures published until buckets reach n >= 10.",
+  "headline": {
+    "pctNotAiVisible": null,
+    "pctFailedSecurity": null,
+    "avgFound": null,
+    "avgSecure": null
+  },
+  "professions": [
+    { "name": "Gestores y asesores fiscales", "n": 0, "avgFound": null },
+    { "name": "Despachos de abogados", "n": 0, "avgFound": null },
+    { "name": "Agentes de aduanas", "n": 0, "avgFound": null },
+    { "name": "Consultores de exportación", "n": 0, "avgFound": null }
+  ],
+  "cities": [
+    { "name": "Madrid", "n": 0, "avgFound": null },
+    { "name": "Barcelona", "n": 0, "avgFound": null },
+    { "name": "Valencia", "n": 0, "avgFound": null },
+    { "name": "Sevilla", "n": 0, "avgFound": null },
+    { "name": "Bilbao", "n": 0, "avgFound": null }
+  ]
+}

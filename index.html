@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Proxaim Index | AI Findability of Professional Services</title>
+  <meta name="description" content="The Proxaim Index measures whether professional-services firms in Italy, Spain and the UK can be found, trusted and recommended by AI assistants. Aggregate, independent, updated as the dataset grows." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "The Proxaim Index",
+    "description": "Aggregate index of AI findability, security posture and GDPR exposure across professional-services firms in Italy, Spain and the United Kingdom. No individual firms are named; all figures are aggregates with stated sample sizes.",
+    "creator": { "@type": "Organization", "name": "Proxaim", "url": "https://proxaim.com" },
+    "license": "https://creativecommons.org/licenses/by-nd/4.0/",
+    "isAccessibleForFree": true
+  }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="wordmark" href="/">
+        <span class="prox">Proxaim</span> <span class="index-tag">INDEX</span>
+      </a>
+      <nav class="top-links">
+        <a href="#method" data-i18n="nav_method">Methodology</a>
+        <a href="#cite" data-i18n="nav_cite">Cite the Index</a>
+        <a href="https://proxaim.com" class="btn-link">proxaim.com</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="kicker" data-i18n="hero_kicker">The Proxaim Index</p>
+        <h1 data-i18n="hero_title">Can AI find, trust and recommend the professionals your economy runs on?</h1>
+        <p class="lede" data-i18n="hero_lede">An independent, aggregate measure of AI findability, security posture and GDPR exposure across professional-services firms. No firm is ever named. Every figure states its sample size.</p>
+
+        <div class="country-tabs" role="tablist" aria-label="Country">
+          <button class="tab" role="tab" data-country="it" aria-selected="false">🇮🇹 Italia</button>
+          <button class="tab" role="tab" data-country="es" aria-selected="false">🇪🇸 España</button>
+          <button class="tab" role="tab" data-country="uk" aria-selected="false">🇬🇧 United Kingdom</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="edition">
+      <div class="wrap">
+        <div class="edition-bar">
+          <div>
+            <span class="edition-label" id="edition-label">—</span>
+            <span class="edition-updated" id="edition-updated"></span>
+          </div>
+          <span class="sample" id="edition-sample"></span>
+        </div>
+
+        <div class="stats-grid" id="headline-stats"><!-- stat cards injected --></div>
+
+        <div class="tables-grid">
+          <div class="table-card">
+            <h2 data-i18n="by_profession">By profession</h2>
+            <div id="profession-table"></div>
+          </div>
+          <div class="table-card">
+            <h2 data-i18n="by_city">By city</h2>
+            <div id="city-table"></div>
+          </div>
+        </div>
+
+        <p class="gate-note" data-i18n="gate_note">Buckets are published only once they reach a credible sample (n ≥ 10). Until then they are shown as collecting, never estimated.</p>
+      </div>
+    </section>
+
+    <section id="method" class="method">
+      <div class="wrap">
+        <h2 data-i18n="method_title">Methodology</h2>
+        <div class="method-grid">
+          <div>
+            <h3 data-i18n="m1_h">What is measured</h3>
+            <p data-i18n="m1_p">Each firm is scanned with the Proxaim Triptique: AI findability (crawler permissions, structured data, business profiles across Google, Bing and Apple, NAP consistency), security posture (outdated software, known CVEs, missing security headers, compound risk), and GDPR exposure signals. Scores are 0 to 100; security is also expressed as a grade.</p>
+          </div>
+          <div>
+            <h3 data-i18n="m2_h">How firms are selected</h3>
+            <p data-i18n="m2_p">Firms are sampled from neutral public registers and top-of-search results per city and profession, with no performance-based filtering, plus firms scanned organically through Proxaim's public tools. Each record is tagged by source so the Index can always be recomputed.</p>
+          </div>
+          <div>
+            <h3 data-i18n="m3_h">Privacy by design</h3>
+            <p data-i18n="m3_p">The Index is aggregate-only. No individual firm is named, ranked or identifiable. Buckets below the minimum sample threshold are withheld. This is a structural measure of a market, not a register of firms.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cite" class="cite">
+      <div class="wrap">
+        <h2 data-i18n="cite_title">Citing the Index</h2>
+        <p data-i18n="cite_p">The Proxaim Index may be cited freely with attribution. Suggested form:</p>
+        <blockquote id="cite-example">Proxaim Index, Edition 1 (2026): AI findability of professional services. proxaimindex.com</blockquote>
+        <p class="cite-contact" data-i18n="cite_contact">Press and institutional enquiries: hello@proxaim.com</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p><span data-i18n="footer_by">Published by</span> <a href="https://proxaim.com">Proxaim</a> · <span data-i18n="footer_tag">The diagnostic platform behind the data.</span></p>
+      <p class="footer-legal">&copy; <span id="year"></span> Proxaim.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

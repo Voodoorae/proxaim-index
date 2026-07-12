@@ -1,0 +1,13 @@
+# The Proxaim Index
+> An independent, aggregate index of AI findability, security posture and GDPR
+> exposure across professional-services firms in Italy, Spain and the United
+> Kingdom. Published by Proxaim (proxaim.com). No individual firm is named;
+> every figure states its sample size. Quarterly editions from September 2026.
+
+## Key pages
+- / : the Index, switchable by country (Italy, Spain, UK)
+- /#method : methodology (Triptique scan, neutral-register sampling, aggregate-only privacy)
+- /#cite : how to cite the Index
+
+## Citation
+Proxaim Index, Edition N (year): AI findability of professional services. proxaimindex.com

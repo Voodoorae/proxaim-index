@@ -1,0 +1,33 @@
+{
+  "citeName": "L'Indice Proxaim",
+  "edition": "Edizione di anteprima (Edizione 1: settembre 2026)",
+  "updated": "luglio 2026",
+  "sampleSize": 6,
+  "previewOverride": true,
+  "_note": "Preview cohort: 5 Italian professional-services firms sampled top-of-Google with no filtering + 1 firm scanned during supply-side validation. Aggregate only. Headline figures computed from real scan results; per-city and per-profession buckets withheld until n >= 10 per bucket.",
+  "headline": {
+    "pctNotAiVisible": 100,
+    "pctFailedSecurity": 100,
+    "avgFound": 50,
+    "avgSecure": 54
+  },
+  "professions": [
+    { "name": "Commercialisti", "n": 3, "avgFound": null },
+    { "name": "Studi legali", "n": 2, "avgFound": null },
+    { "name": "Notai", "n": 1, "avgFound": null },
+    { "name": "Spedizionieri e dogane", "n": 0, "avgFound": null },
+    { "name": "Consulenti sicurezza alimentare", "n": 0, "avgFound": null }
+  ],
+  "cities": [
+    { "name": "Milano", "n": 2, "avgFound": null },
+    { "name": "Torino", "n": 0, "avgFound": null },
+    { "name": "Padova", "n": 0, "avgFound": null },
+    { "name": "Bologna", "n": 0, "avgFound": null },
+    { "name": "Firenze", "n": 1, "avgFound": null },
+    { "name": "Roma", "n": 0, "avgFound": null },
+    { "name": "Napoli", "n": 0, "avgFound": null },
+    { "name": "Bari", "n": 0, "avgFound": null },
+    { "name": "Palermo", "n": 0, "avgFound": null },
+    { "name": "Trieste", "n": 0, "avgFound": null }
+  ]
+}

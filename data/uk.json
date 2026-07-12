@@ -1,0 +1,26 @@
+{
+  "citeName": "The Proxaim Index",
+  "edition": "Preview edition (Edition 1: September 2026)",
+  "updated": "July 2026",
+  "sampleSize": 3,
+  "previewOverride": true,
+  "_note": "Preview cohort: UK firms scanned in the original corridor research (importers + one professional-services firm). Aggregate only; buckets withheld until n >= 10.",
+  "headline": {
+    "pctNotAiVisible": 100,
+    "pctFailedSecurity": 100,
+    "avgFound": 55,
+    "avgSecure": 60
+  },
+  "professions": [
+    { "name": "Solicitors and legal", "n": 1, "avgFound": null },
+    { "name": "Accountants", "n": 0, "avgFound": null },
+    { "name": "Import / export intermediaries", "n": 2, "avgFound": null },
+    { "name": "Customs and freight", "n": 0, "avgFound": null }
+  ],
+  "cities": [
+    { "name": "Edinburgh", "n": 2, "avgFound": null },
+    { "name": "London", "n": 0, "avgFound": null },
+    { "name": "Glasgow", "n": 0, "avgFound": null },
+    { "name": "Manchester", "n": 0, "avgFound": null }
+  ]
+}
