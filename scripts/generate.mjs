@@ -128,10 +128,13 @@ export function computeCountry(rows, country) {
   return {
     sampleSize: domains.size,
     headline: {
-      pctNotAiVisible: pct(found.filter((r) => r.score < NOT_FULLY_FINDABLE_BELOW).length, found.length),
-      pctFailedSecurity: pct(secure.filter((r) => r.score < SECURITY_PASS_AT).length, secure.length),
-      avgFound: round(mean(found.map((r) => r.score))),
-      avgSecure: round(mean(secure.map((r) => r.score))),
+      // Gated the same way as computeProfessions/computeCities below: below
+      // MIN_BUCKET the public JSON must never carry a national average from
+      // a handful of domains (IDX-01).
+      pctNotAiVisible: found.length >= MIN_BUCKET ? pct(found.filter((r) => r.score < NOT_FULLY_FINDABLE_BELOW).length, found.length) : null,
+      pctFailedSecurity: secure.length >= MIN_BUCKET ? pct(secure.filter((r) => r.score < SECURITY_PASS_AT).length, secure.length) : null,
+      avgFound: found.length >= MIN_BUCKET ? round(mean(found.map((r) => r.score))) : null,
+      avgSecure: secure.length >= MIN_BUCKET ? round(mean(secure.map((r) => r.score))) : null,
     },
     professionBuckets: computeProfessions(found, country),
     cityBuckets: computeCities(found),
@@ -329,8 +332,11 @@ function selfTest() {
   const assert = (cond, msg) => { if (!cond) throw new Error(`SELF-TEST FAIL: ${msg}`); };
 
   assert(it.sampleSize === 4, `it sampleSize 4, got ${it.sampleSize}`);
-  assert(it.headline.avgFound === round((60 + 100 + 50 + 45) / 4), `it avgFound, got ${it.headline.avgFound}`);
-  assert(it.headline.avgSecure === 78, `it avgSecure (70+85)/2=78, got ${it.headline.avgSecure}`);
+  // it has 4 found rows / 2 secure rows, both under MIN_BUCKET=10, so the
+  // national headline is gated null too (IDX-01) — same rule as buckets,
+  // not just the es case this was originally caught on.
+  assert(it.headline.avgFound === null, `it avgFound gated below MIN_BUCKET (n=4), got ${it.headline.avgFound}`);
+  assert(it.headline.avgSecure === null, `it avgSecure gated below MIN_BUCKET (n=2), got ${it.headline.avgSecure}`);
   assert(it.professionBuckets.every((p) => p.avgFound === null), "small buckets must stay null");
   assert(it.professionBuckets.find((p) => p.name === "Commercialisti").n === 1, "seed row must not count");
   assert(it.professionBuckets.find((p) => p.name === "Spedizionieri e dogane").n === 1, "new customs profession bucket");
@@ -338,7 +344,7 @@ function selfTest() {
   const milano = it.cityBuckets.find((c) => c.name === "Milano");
   assert(milano && milano.n === 2 && milano.avgFound === null, `Milano case-folds to n=2, gated null; got ${JSON.stringify(it.cityBuckets)}`);
   assert(uk.sampleSize === 1 && uk.headline.avgSecure === null, "uk: 1 domain, no secure rows -> null");
-  assert(es.sampleSize === 1 && es.headline.avgFound === 65, `es Spanish region maps, got ${JSON.stringify(es.headline)}`);
+  assert(es.sampleSize === 1 && es.headline.avgFound === null, `es: region maps but n=1 stays gated below MIN_BUCKET, got ${JSON.stringify(es.headline)}`);
   const mergedCities = mergeCities(
     [{ name: "Milano", n: 0, avgFound: null }, { name: "Torino", n: 0, avgFound: null }],
     it.cityBuckets,
