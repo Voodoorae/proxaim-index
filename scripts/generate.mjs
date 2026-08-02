@@ -62,6 +62,7 @@ const PROFESSION_LABELS = {
     "Consultant": "Consulenti",
     "Architect / Engineer": "Architetti e ingegneri",
     "Customs agent / freight forwarder": "Spedizionieri e dogane",
+    "Logistics": "Operatori logistici",
     "Food safety consultant": "Consulenti sicurezza alimentare",
     "Other professional services": "Altri servizi professionali",
   },
@@ -72,6 +73,7 @@ const PROFESSION_LABELS = {
     "Consultant": "Consultants",
     "Architect / Engineer": "Architects and engineers",
     "Customs agent / freight forwarder": "Customs and freight",
+    "Logistics": "Logistics providers",
     "Food safety consultant": "Food safety consultants",
     "Other professional services": "Other professional services",
   },
@@ -82,6 +84,7 @@ const PROFESSION_LABELS = {
     "Consultant": "Consultores",
     "Architect / Engineer": "Arquitectos e ingenieros",
     "Customs agent / freight forwarder": "Agentes de aduanas y transitarios",
+    "Logistics": "Operadores logísticos",
     "Food safety consultant": "Consultores de seguridad alimentaria",
     "Other professional services": "Otros servicios profesionales",
   },
@@ -143,7 +146,7 @@ export function computeCountry(rows, country) {
 }
 
 /** Profession is free text at the store level (see cleanProfession in
- * benchmark.ts) — a firm outside the original 8 known niches is captured as
+ * benchmark.ts) — a firm outside the original 9 known niches is captured as
  * whatever the visitor typed, not discarded. This groups Found-pillar rows
  * case-insensitively; a profession matching a known niche (e.g. "lawyer
  * (avvocato)") gets that niche's translated label, anything else is bucketed
@@ -323,7 +326,7 @@ function selfTest() {
     ["c.uk", "2026-07-03 10:00:00", 55, "Consultant", "United Kingdom", "audit", "Found", "Edinburgh"],
     ["d.es", "2026-07-04 10:00:00", 65, "Lawyer (Avvocato)", "Central Spain", "audit", "Found", "Madrid"],
     ["e.it", "2026-07-05 10:00:00", 50, "Customs agent / freight forwarder", "Northern Italy", "audit", "Found", "milano"], // case-folds with Milano
-    ["f.it", "2026-07-06 10:00:00", 45, "Dentist", "Northern Italy", "audit", "Found", "Bergamo"], // profession outside the 8 known niches
+    ["f.it", "2026-07-06 10:00:00", 45, "Dentist", "Northern Italy", "audit", "Found", "Bergamo"], // profession outside the 9 known niches
     ["bad.it", "2026-07-03 10:00:00", 999, "Consultant", "Northern Italy", "audit", "Found"], // invalid, dropped
   ]);
   const it = computeCountry(rows, "it");
@@ -340,7 +343,7 @@ function selfTest() {
   assert(it.professionBuckets.every((p) => p.avgFound === null), "small buckets must stay null");
   assert(it.professionBuckets.find((p) => p.name === "Commercialisti").n === 1, "seed row must not count");
   assert(it.professionBuckets.find((p) => p.name === "Spedizionieri e dogane").n === 1, "new customs profession bucket");
-  assert(it.professionBuckets.find((p) => p.name === "Dentist").n === 1, "profession outside the 8 known niches still gets its own bucket");
+  assert(it.professionBuckets.find((p) => p.name === "Dentist").n === 1, "profession outside the 9 known niches still gets its own bucket");
   const milano = it.cityBuckets.find((c) => c.name === "Milano");
   assert(milano && milano.n === 2 && milano.avgFound === null, `Milano case-folds to n=2, gated null; got ${JSON.stringify(it.cityBuckets)}`);
   assert(uk.sampleSize === 1 && uk.headline.avgSecure === null, "uk: 1 domain, no secure rows -> null");
