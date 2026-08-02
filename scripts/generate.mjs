@@ -21,7 +21,10 @@
      leaks a small-sample figure the site would refuse to display.
    - Editorial fields (citeName, edition, updated, previewOverride, _note,
      cities) are preserved from the existing file, never invented here.
-   - Cities are NOT computed: the benchmark store has no city column yet.
+   - City buckets ARE computed (computeCities, Found pillar only) from the
+     store's city column (added 17 Jul 2026). This comment previously said
+     the opposite; it was stale and caused Stack Scanner to drop its own
+     City field on 31 Jul on the same wrong assumption.
    - Countries with zero mappable rows are skipped, never zeroed out. */
 
 import { createSign } from "node:crypto";
@@ -63,6 +66,8 @@ const PROFESSION_LABELS = {
     "Architect / Engineer": "Architetti e ingegneri",
     "Customs agent / freight forwarder": "Spedizionieri e dogane",
     "Logistics": "Operatori logistici",
+    "Importer / Exporter": "Importatori ed esportatori",
+    "Food grower / manufacturer": "Produttori e trasformatori alimentari",
     "Food safety consultant": "Consulenti sicurezza alimentare",
     "Other professional services": "Altri servizi professionali",
   },
@@ -74,6 +79,8 @@ const PROFESSION_LABELS = {
     "Architect / Engineer": "Architects and engineers",
     "Customs agent / freight forwarder": "Customs and freight",
     "Logistics": "Logistics providers",
+    "Importer / Exporter": "Importers and exporters",
+    "Food grower / manufacturer": "Food producers and manufacturers",
     "Food safety consultant": "Food safety consultants",
     "Other professional services": "Other professional services",
   },
@@ -85,6 +92,8 @@ const PROFESSION_LABELS = {
     "Architect / Engineer": "Arquitectos e ingenieros",
     "Customs agent / freight forwarder": "Agentes de aduanas y transitarios",
     "Logistics": "Operadores logísticos",
+    "Importer / Exporter": "Importadores y exportadores",
+    "Food grower / manufacturer": "Productores y fabricantes de alimentos",
     "Food safety consultant": "Consultores de seguridad alimentaria",
     "Other professional services": "Otros servicios profesionales",
   },
@@ -146,7 +155,7 @@ export function computeCountry(rows, country) {
 }
 
 /** Profession is free text at the store level (see cleanProfession in
- * benchmark.ts) — a firm outside the original 9 known niches is captured as
+ * benchmark.ts) — a firm outside the original 11 known niches is captured as
  * whatever the visitor typed, not discarded. This groups Found-pillar rows
  * case-insensitively; a profession matching a known niche (e.g. "lawyer
  * (avvocato)") gets that niche's translated label, anything else is bucketed
@@ -326,7 +335,7 @@ function selfTest() {
     ["c.uk", "2026-07-03 10:00:00", 55, "Consultant", "United Kingdom", "audit", "Found", "Edinburgh"],
     ["d.es", "2026-07-04 10:00:00", 65, "Lawyer (Avvocato)", "Central Spain", "audit", "Found", "Madrid"],
     ["e.it", "2026-07-05 10:00:00", 50, "Customs agent / freight forwarder", "Northern Italy", "audit", "Found", "milano"], // case-folds with Milano
-    ["f.it", "2026-07-06 10:00:00", 45, "Dentist", "Northern Italy", "audit", "Found", "Bergamo"], // profession outside the 9 known niches
+    ["f.it", "2026-07-06 10:00:00", 45, "Dentist", "Northern Italy", "audit", "Found", "Bergamo"], // profession outside the 11 known niches
     ["bad.it", "2026-07-03 10:00:00", 999, "Consultant", "Northern Italy", "audit", "Found"], // invalid, dropped
   ]);
   const it = computeCountry(rows, "it");
@@ -343,7 +352,7 @@ function selfTest() {
   assert(it.professionBuckets.every((p) => p.avgFound === null), "small buckets must stay null");
   assert(it.professionBuckets.find((p) => p.name === "Commercialisti").n === 1, "seed row must not count");
   assert(it.professionBuckets.find((p) => p.name === "Spedizionieri e dogane").n === 1, "new customs profession bucket");
-  assert(it.professionBuckets.find((p) => p.name === "Dentist").n === 1, "profession outside the 9 known niches still gets its own bucket");
+  assert(it.professionBuckets.find((p) => p.name === "Dentist").n === 1, "profession outside the 11 known niches still gets its own bucket");
   const milano = it.cityBuckets.find((c) => c.name === "Milano");
   assert(milano && milano.n === 2 && milano.avgFound === null, `Milano case-folds to n=2, gated null; got ${JSON.stringify(it.cityBuckets)}`);
   assert(uk.sampleSize === 1 && uk.headline.avgSecure === null, "uk: 1 domain, no secure rows -> null");
