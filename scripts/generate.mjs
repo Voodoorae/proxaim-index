@@ -110,7 +110,10 @@ export function parseRows(values) {
       profession: String(r[3] ?? "Unspecified"),
       region: String(r[4] ?? "Unspecified"),
       source: r[5] === "seed" ? "seed" : "audit",
-      pillar: r[6] === "Secure" ? "Secure" : "Found", // legacy rows = Found
+      // Legacy rows (no pillar) = Found. FoundDigital is Found Score on the
+      // digital-only basis (a different scale) and must never be folded into
+      // Found: computeCountry only publishes Found and Secure.
+      pillar: r[6] === "Secure" ? "Secure" : r[6] === "FoundDigital" ? "FoundDigital" : "Found",
       city: String(r[7] ?? "").trim(), // "" on all rows before 17 Jul 2026
     }))
     .filter((r) => r.domain && Number.isFinite(r.score) && r.score >= 0 && r.score <= 100);
@@ -135,7 +138,9 @@ export function computeCountry(rows, country) {
   );
   const found = latestPerDomain(inCountry.filter((r) => r.pillar === "Found"));
   const secure = latestPerDomain(inCountry.filter((r) => r.pillar === "Secure"));
-  const domains = new Set(inCountry.map((r) => r.domain));
+  // n counts only domains behind a published figure; a digital-only firm is
+  // not in any average, so it must not inflate the sample size either.
+  const domains = new Set(inCountry.filter((r) => r.pillar !== "FoundDigital").map((r) => r.domain));
 
   return {
     sampleSize: domains.size,
@@ -370,7 +375,23 @@ function selfTest() {
   assert(mergedProfessions.find((p) => p.name === "Commercialisti").n === 1, "editorial Commercialisti picks up computed n");
   assert(mergedProfessions.find((p) => p.name === "Notai").n === 0, "editorial Notai with no data stays 0");
   assert(mergedProfessions.find((p) => p.name === "Dentist").n === 1, "unlisted profession appended by mergeProfessions");
-  console.log("Self-test passed: seed exclusion, rescan-latest, legacy pillar, gating, thresholds, es mapping, city + profession fold/merge all verified.");
+
+  // FoundDigital rows must stay out of every Found figure and the sample size.
+  const digitalRows = [];
+  for (let i = 0; i < 10; i++) digitalRows.push([`loc${i}.it`, "2026-10-01 10:00:00", 40, "Consultant", "Northern Italy", "audit", "Found", "Milano"]);
+  for (let i = 0; i < 10; i++) digitalRows.push([`dig${i}.it`, "2026-10-02 10:00:00", 90, "Consultant", "Northern Italy", "audit", "FoundDigital", "Milano"]);
+  for (let i = 0; i < 10; i++) { // location scan, then a later digital re-assessment of the same domain
+    digitalRows.push([`re${i}.it`, "2026-10-01 10:00:00", 30, "Consultant", "Northern Italy", "audit", "Found", "Milano"]);
+    digitalRows.push([`re${i}.it`, "2026-10-03 10:00:00", 80, "Consultant", "Northern Italy", "audit", "FoundDigital", "Milano"]);
+  }
+  const parsedDigital = parseRows(digitalRows);
+  assert(parsedDigital.some((r) => r.pillar === "FoundDigital"), "parseRows keeps FoundDigital as its own pillar");
+  const dig = computeCountry(parsedDigital, "it");
+  assert(dig.counts.foundDomains === 20, `digital-only domains not counted as Found; expected 20 Found domains, got ${dig.counts.foundDomains}`);
+  assert(dig.sampleSize === 20, `digital-only domains not in sample size; expected 20, got ${dig.sampleSize}`);
+  assert(dig.headline.avgFound === 35, `avgFound uses location-basis scores only (35), got ${dig.headline.avgFound}`);
+  assert(dig.cityBuckets.find((c) => c.name === "Milano").n === 20, "city buckets ignore FoundDigital rows");
+  console.log("Self-test passed: seed exclusion, rescan-latest, legacy pillar, gating, thresholds, es mapping, city + profession fold/merge, FoundDigital kept out of Found all verified.");
 }
 
 /* ---------- main ---------- */
