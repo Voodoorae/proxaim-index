@@ -2,7 +2,7 @@
 > An independent, aggregate index of AI findability, security posture and GDPR
 > exposure across professional-services firms in Italy, Spain and the United
 > Kingdom. Published by Proxaim (proxaim.com). No individual firm is named;
-> every figure states its sample size. Quarterly editions from September 2026.
+> every figure states its sample size. Quarterly editions planned; Edition 1 is in collection.
 
 ## Key pages
 - / : the Index, switchable by country (Italy, Spain, UK)
